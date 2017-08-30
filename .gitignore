@@ -1,0 +1,17 @@
+# Binary Objects
+*.pyc
+*.a
+*.o
+*_test
+
+# Latex Objects
+*.aux
+*.log
+*.synctex.gz
+
+# Image Objects
+*.eps
+*.png
+
+# PDFs
+*.pdf
