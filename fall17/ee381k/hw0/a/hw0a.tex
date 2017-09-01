@@ -1,0 +1,48 @@
+\documentclass{article}
+\usepackage[numbered, framed,autolinebreaks,useliterate]{mcode}
+\usepackage{amsmath, amsthm}
+\usepackage{amssymb}
+\usepackage{graphicx}
+\usepackage{epstopdf}
+\usepackage{cancel}
+\usepackage{subcaption}
+\usepackage{mathtools}
+\usepackage{siunitx}
+\sisetup{output-exponent-marker=\ensuremath{\mathrm{e}}}
+\usepackage{float}
+
+% --- Begin Document
+\begin{document}
+
+% -- Title
+\begin{center}
+	{\huge EE 381K: Assignment 0 A}
+\end{center}
+\begin{center}
+	Akhil Shah
+\end{center}
+\begin{center}
+	September 8th, 2017
+\end{center}
+
+% --- First Problem
+\noindent
+1. Overdetermined Least Squares \newline
+\begin{align*}
+	||X\beta - y||_{2}^{2} &= (X\beta - y)^T(X\beta - y) \\
+	&= (\beta^TX^T - y)(X\beta - y) \\
+	&= \beta^TX^TX\beta - 2\beta^TX^Ty + y^Ty
+\end{align*}
+A function is convex if the following holds true:
+\begin{equation}
+	f(\theta\beta + (1-\theta)\alpha) \leq \theta f(\beta) + (1-\theta)f(\alpha)
+\end{equation}
+where $ 0 \leq \theta \leq 1 $. 
+\begin{align*}
+	\underbrace{||X(\theta\beta + (1-\theta)\alpha) - y||_{2}^{2}}_1 &\leq \underbrace{\theta||X\beta - y||^2_2 + (1 - \theta)||X\beta - y||^2_2}_2 \\
+\end{align*}
+
+
+
+
+\end{document}
