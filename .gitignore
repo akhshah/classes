@@ -8,10 +8,21 @@
 *.aux
 *.log
 *.synctex.gz
+*.fls
+*.fdb*
 
 # Image Objects
 *.eps
 *.png
+*.jpg
+*.tiff
 
 # PDFs
 *.pdf
+
+# Directories
+.ipynb_checkpoints/
+
+# Compressed Files
+*.zip
+*.tar*
