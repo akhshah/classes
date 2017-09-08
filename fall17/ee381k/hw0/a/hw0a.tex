@@ -39,10 +39,135 @@ A function is convex if the following holds true:
 \end{equation}
 where $ 0 \leq \theta \leq 1 $. 
 \begin{align*}
-	\underbrace{||X(\theta\beta + (1-\theta)\alpha) - y||_{2}^{2}}_1 &\leq \underbrace{\theta||X\beta - y||^2_2 + (1 - \theta)||X\beta - y||^2_2}_2 \\
+	\underbrace{||X(\theta\beta + (1-\theta)\alpha) - y||_{2}^{2}}_1 &\leq \underbrace{\theta||X\beta - y||^2_2 + (1 - \theta)||X\alpha - y||^2_2}_2 \\
 \end{align*}
-
-
-
-
+Expanding out 1:
+\begin{align*}
+	||X(\theta\beta + (1-\theta)\alpha) - y||_{2}^{2} &= 
+	\theta(\beta^TX^TX\beta - 2\beta^TX^Ty + y^Ty) \\ &+ 
+	(1 - \theta)(\alpha^TX^TX\alpha - 2\alpha^TX^Ty + y^Ty) \\
+\end{align*}
+Expanding out 2:
+\begin{align*}
+	\theta||X\beta - y||^2_2 + (1 - \theta)||X\alpha - y||^2_2 &= \theta^2\beta^TX^TX\beta \\ &+ (1-\theta)^2\alpha^TX^TX\alpha \\&- 2(\theta\beta X^T + (1-\theta)\alpha^TX^T)y +y^Ty \\
+\end{align*}
+Deleting and combining like terms gives us:
+\begin{equation*}
+	\theta^2\beta^TX^TX\beta^T + (1-\theta)^2\alpha^TX^TX\alpha \leq \theta\beta^TX^TX\beta^T + (1-\theta)\alpha^TX^TX\alpha 
+\end{equation*}
+Since $\theta$ is between $0$ and $1$, we know that $\theta^2 \leq \theta$ and therefore the above equation holds true, proving that the function is convex. 
+\newpage
+\noindent
+Finding $\beta_{LS}$:
+\begin{align*}
+	||X\beta - y||^2_2 &= (X\beta - y)^T(X\beta-y) \\
+	&= (\beta^TX^T - y^T)((X\beta-y) \\
+	&= \beta^TX^TX\beta - 2\beta^TX^T + y^Ty
+\end{align*}
+\begin{equation*}
+	\nabla f(\beta) = 2X^TX\beta - 2X^Ty
+\end{equation*}
+Setting the $\nabla f(\beta)$ to $0$:
+\begin{align*}
+	2X^TX\beta - 2X^Ty &= 0 \\
+	\beta_{LS} = (X^TX)^{-1}X^Ty
+\end{align*}
+Via Projection:
+\begin{align*}
+	\text{min} &: \quad||z - y||^2_2 \\
+	\text{subj. to} &: \quad z \in \text{Range}(X) = \{ X\beta : \beta \in \mathbb{R} \}
+\end{align*}
+The orthogonal projection $\Pi_M$ is defined as the following
+\begin{equation*}
+	\Pi_M = A(A^TA)^{-1}A^T
+\end{equation*}
+\begin{align*}
+	(y - \Pi_M(y) )^Tz &= (y - \Pi_M(y) )^TX\beta \\
+	&= y^T(I - X(X^TX)^{-1}X^T)^TX\beta \\
+	&= 0
+\end{align*}
+And so $\Pi_M(y) = X(X^TX)^{-1}X^Ty $ is the optimal solution. 
+\newpage
+\noindent
+Underdetermined System:
+Since $\beta_0$ is a single solution that satisfies $y = X\beta$, alternate solutions $\beta$ can be a linear combination of $\beta_0$ and any vector that is in the $\text{Null}(X)$ (denoted as $z$). $\beta_0$ is also orthogonal to $z$. 
+\begin{align*}
+	||\beta||^2_2 &= ||\beta_0 + z||^2_2 \\
+	&\geq ||\beta_0||^2_2 + ||z||^2_2 \\
+	& \geq ||\beta_0||^2_2
+\end{align*}
+Therefore, $\beta_0$ is the minimum norm solution. \par
+\newpage
+\noindent
+12. Consider the set
+\begin{equation}
+	C = \{ x \in \mathbb{R}^n : x^TAx = b^Tx + c \leq 0 \}
+\end{equation}
+a) Show that if $A \in \mathbb{S}^n_+$ then the set $C$ is convex.
+A set is convex if a line can be contained within the set. 
+Let $x_1$, $x_2$ be points contained in C, then the line $\theta x_1 + (1-\theta) x_2$ should be contained in C, if C is convex.
+\begin{align*}
+	\theta x_1 + (1-\theta) x_2 &= \underbrace{x_2}_y + \theta\underbrace{(x_1 - x_2)}_x
+\end{align*}
+\begin{align*}
+	(y + \theta x)^TA(y + \theta x) + b^T(y+ \theta x) + c &= \\ y^TAy + b^Ty + c + \theta^2x^TAx + \theta(2x^TAy + b^Tx)
+\end{align*}
+Since the original function gives us a scalar value, we can model the the vector quadratic into a scalar quadratic as a function of $\theta$, e.g., $\alpha\theta^2 + \beta\theta + \kappa$. The leading term $\alpha$ is key and dictates the convexity of the scalar quadratic. 
+\begin{equation*}
+	\alpha = x^TAx
+\end{equation*}
+Which is a quadratic that also dictates definiteness of a matrix.
+\begin{equation*}
+	A = \left.
+	\begin{cases}
+		A \in \mathbb{S}^n_+ \text{and } C \text{ is convex} , & \text{for } \alpha \geq 0 \\
+		A \not\in \mathbb{S}^n_+ \text{and } C \text{ is not convex}, & \text{for } \alpha < 0
+	\end{cases}
+	\right\}
+\end{equation*}
+b) Set obtained by intersect C with a hyperplane:
+\begin{equation*}
+	C_1 = C \cap \{ x: g^Tx + h = 0 \}
+\end{equation*}
+Show that $C_1$ is convex if $(A + \lambda gg^T) \in \mathbb{S}^n_+$
+If $S_1 \text{ and } S_2$ is convex, then $S_1 \cap S_2$ is convex. \par
+\noindent
+Substituting in the line from part a):
+\begin{align*}
+	g^T(y + \theta x)  + h &= 0 \\
+	g^Ty + g^T\theta x + h &= 0
+\end{align*}
+And using the same trick from above, $\gamma = g^Tx$ and $\eta = g^Ty + h$. Since $y = x_2$, and $x_2$ is in the sets, then $\eta = 0$. Therefore, $g^Tx\theta = 0 \implies g^Tx = 0$. Because of this, we know that that the quadratic relation, $x^Tgg^Tx = 0$ and multiplying by any scalar $\lambda$ gives an equivalent result. We already know that a hyperplane generates a convex set, we know that when $\lambda x^Tgg^Tx = 0 \implies x^TAx \geq 0$, so $ x^TAx + \lambda x^Tgg^Tx \geq 0$ in order for $C_1$ to be a convex set. The previous statement is the same as showing semi-positive definiteness, which is what we wanted to prove initially. 
+\newpage
+\noindent
+13. Show that $ S = \{a, b : a^Tx \leq b \ \forall x \in C, a^Tx \geq b \ \forall \in D \}$ is convex. 
+$x_1 \in C, x_2 \in D$ and $x_1, x_2 \in S$.
+\begin{align*}
+	a^T(\theta x_1 + (1-\theta)x_2) &= \theta a^Tx_1 + (1-\theta)a^Tx_2 \\
+	&= \theta b + (1-\theta)b \\
+	&= b
+\end{align*}
+The set $S$ is also the set of all linear inequalities, which is inherently convex. 
+\newline\newline
+14. Find $c$ and $d$ such that:
+\begin{equation*}
+	\{ x : ||x - v_1|| \leq ||x - v_2|| \} = \{x : c^Tx \leq d\}
+\end{equation*}
+\begin{align*}
+	||x - v_1|| &\leq ||x - v_2|| \\
+	(x^T - v_1^T)(x - v_1) &\leq (x^T - v_2^T)(x - v_2) \\
+	\cancel{x^Tx} - 2v_1^Tx + v_1^Tv_1 &\leq \cancel{x^Tx} - 2v_2^Tx + v_2^Tv_2 \\
+	2(v_2 - v_1)^Tx &\leq v_2^Tv_2 - v_1^Tv_1
+\end{align*}
+$c = 2(v_2 - v_1)$ and $d = v_2^Tv_2 - v_1^Tv_1 $. 
+\newline\newline
+15. Show that a $C$ exists such that $CA = B$, if $Ax = 0 \implies Bx = 0$. 
+$Ax = 0 \implies Bx = 0$ tell us that $A$ and $B$ have the same nullspaces. 
+\begin{align*}
+	Bx &= (CA)x \\
+	&= C(Ax) \\
+	&= C0 \\
+	&= 0
+\end{align*}
+So there is a $C$ that can transform A into B that preserves the nullspace. 
 \end{document}
