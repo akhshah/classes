@@ -77,6 +77,10 @@ Via Projection:
 	\text{min} &: \quad||z - y||^2_2 \\
 	\text{subj. to} &: \quad z \in \text{Range}(X) = \{ X\beta : \beta \in \mathbb{R} \}
 \end{align*}
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=0.75\textwidth]{orthogproj}
+\end{figure}
 The orthogonal projection $\Pi_M$ is defined as the following
 \begin{equation*}
 	\Pi_M = A(A^TA)^{-1}A^T
@@ -96,7 +100,23 @@ Since $\beta_0$ is a single solution that satisfies $y = X\beta$, alternate solu
 	&\geq ||\beta_0||^2_2 + ||z||^2_2 \\
 	& \geq ||\beta_0||^2_2
 \end{align*}
-Therefore, $\beta_0$ is the minimum norm solution. \par
+Therefore, $\beta_0$ is the minimum norm solution. \newline
+\newline
+\noindent
+$\beta_0 \in \text{span } x_1, ..., x_n$ or $\beta_0 = X^Ta$ (where a is some vector) is equivalent to saying that $\beta_0$ is in the column space of $X^T$. We know that the column space of the transpose of $X$ is orthogonal to the nullspace of $X$.
+\begin{align*}
+	z^T\beta_0 &= z^T(X^Ta) \\
+	&= (Xz)^Ta \\
+	&= 0a \\
+	&= 0
+\end{align*}
+So, the solution for $a$ is:
+\begin{align*}
+	y &= X\beta_0 \\
+	&= XX^Ta \\
+	a &= (XX^T)^{-1}y
+\end{align*}
+And so $\beta_0 = X^Ta = X^T(XX^T)^{-1}y$.
 \newpage
 \noindent
 12. Consider the set
