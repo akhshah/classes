@@ -1,0 +1,83 @@
+\documentclass{article}
+\usepackage[numbered, framed,autolinebreaks,useliterate]{mcode}
+\usepackage{amsmath, amsthm}
+\usepackage{amssymb}
+\usepackage{graphicx}
+\usepackage{epstopdf}
+\usepackage{cancel}
+\usepackage{subcaption}
+\usepackage{mathtools}
+\usepackage{siunitx}
+\sisetup{output-exponent-marker=\ensuremath{\mathrm{e}}}
+\usepackage{float}
+
+% --- Begin Document
+\begin{document}
+
+% --- Title
+\begin{center}
+	{\huge ASE 381K: Assignment 1}
+\end{center}
+\begin{center}
+	Akhil Shah
+\end{center}
+\begin{center}
+	September 27th, 2017
+\end{center}
+
+\noindent
+6. Minimize the function $f{x} = \frac{1}{2}x^TQx - x^Tb$ numerically and analytically. \newline\newline
+First, find the optimal stepsize, $a_k$, for every point $x_k$ by finding the minimum of $E(a_k) = \frac{1}{2}(x_k - a_kg(x_k))^TQ(x_k - a_kg(x_k)) - (x_k - a_kg(x_k))^Tb$
+\begin{align*}
+	\frac{\partial E(a_k)}{\partial a_k} = -(x_k - a_kg(x_k))^TQg(x_k) + g^T(x_k)b &= 0 \\
+	-x_k^TQg(x_k) + a_kg^T(x_k)Qg(x_k) + g^T(x_k)b &= 0 \\
+	a_kg^T(x_k)Qg(x_k) &= x_k^TQg(x_k) - g^T(x_k)b \\
+	a_k &= \frac{x_k^TQg(x_k) - g^T(x_k)b}{g^T(x_k)Qg(x_k)}
+\end{align*}
+Analytical Solution:
+\begin{align*}
+	g(x_k) = Qx - b  &= 0 \\
+	x &= Q^{-1}b \\
+	x^* &= \begin{bmatrix}
+		0.1739 \\
+		-0.0435
+		\end{bmatrix}
+\end{align*}
+Numerical Solution:
+Three initial conditions were chose as follows:
+\begin{equation*}
+	x_0 = \left\{
+	\begin{bmatrix}
+		1 \\ -1
+	\end{bmatrix},
+	\begin{bmatrix}
+		10 \\ 15
+	\end{bmatrix},
+	\begin{bmatrix}
+		-100 \\ -150
+	\end{bmatrix}
+	\right\}
+\end{equation*}
+\begin{table}[H]
+	\centering
+	\caption{\# of Iterations}
+	\begin{tabular}{c| c c c}
+	& $x_{0_1}$ & $x_{0_2}$  & $x_{0_3}$ \\
+	\hline
+	\# & 7 & 8 & 10
+	\end{tabular}
+\end{table}
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=0.75\textwidth]{error}
+	\caption{Error for the three different initial conditions, respectively}
+\end{figure}
+
+\newpage
+\noindent
+{\huge Code:} \newline
+\texttt{main.m}
+\lstinputlisting{./main.m}
+\texttt{minimizer.m}
+\lstinputlisting{./minimizer.m}
+\end{document}

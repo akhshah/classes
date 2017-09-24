@@ -3,7 +3,7 @@ clear all
 clc
 %% Initial Conditions + Function Conditions
 % three different initial conditions
-x0(:,1) = [0; 0];
+x0(:,1) = [1; -1];
 x0(:,2) = [10; 15];
 x0(:,3) = [-100; -150];
 
@@ -22,25 +22,31 @@ for i=1:length(x0)
     [x{i}, iterations(i)] = minimizer(x0(:,i), Q, b, epsilon);
 end
 
-charvec{1} = ['-']
-charvec{2} = ['--']
-charvec{3} = ['-.']
+charvec{1} = ['*-'];
+charvec{2} = ['o--'];
+charvec{3} = ['-.'];
+
+iterations
 
 figure
 subplot(2,1,1)
-title('x^* - x_n Error')
+title('Error $x^* - x_n$','interpreter', 'latex', 'FontSize', 15)
 hold on
 grid on
 for i=1:length(x0)
     plot(1:iterations(i)+1, xstar(1) - x{i}(1,:), charvec{i})
 end
-ylabel('Dimension 1 Error')
-legend('x0_1', 'x0_2', 'x0_3')
+ylabel('Error $x_{1}$' ,'interpreter', 'latex', 'FontSize', 15)
+legprop = legend('$x_{0_1}$', '$x_{0_2}$', '$x_{0_3}$');
+set(legprop,'interpreter', 'latex', 'FontSize', 15)
 subplot(2,1,2)
 hold on
 grid on
 for i=1:length(x0)
     plot(1:iterations(i)+1, xstar(2) - x{i}(2,:), charvec{i})
 end
-ylabel('Dimension 2 Error')
-xlabel('# of Iterations')
+ylabel('')
+ylabel('Error $x_{2}$' ,'interpreter', 'latex', 'FontSize', 15)
+xlabel('\# of Iterations','interpreter', 'latex', 'FontSize', 15)
+
+print('error', '-depsc')

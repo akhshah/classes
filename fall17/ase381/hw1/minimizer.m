@@ -25,5 +25,5 @@ grad = Q*x - b;
 end
 
 function alpha = step(x, Q, b, grad)
-alpha = -(grad'*b - grad'*Q*x)/(grad'*Q*grad);
+alpha = (-grad'*b + grad'*Q*x)/(grad'*Q*grad);
 end
