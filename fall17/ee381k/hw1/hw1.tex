@@ -1,0 +1,275 @@
+\documentclass{article}
+\usepackage{amsmath, amsthm, amssymb}
+\usepackage{cancel}
+
+% --- Begin Document
+\begin{document}
+
+% --- Title
+\begin{center}
+    {\huge EE381K: Assignment 1}
+\end{center}
+\begin{center}
+    Akhil Shah
+\end{center}
+\begin{center}
+    September 22nd, 2017
+\end{center}
+
+\section{Written Problems}
+1. Decreasing Stepsize. \newline\newline
+Starting with the definition of a $\beta$-smooth function:
+\begin{align*}
+	f(x_{k+1}) &\leq f(x_k)  + \nabla f^T(x_k)(x_{k+1} - x_{k}) + \frac{\beta}{2} || x_{k+1} - x_k ||^2_2 \\
+	&= f(x_k) - t_k ||\nabla f(x_k) ||^2_2 + \frac{\beta}{2} t_k^2 || \nabla f(x_k) ||^2_2 \\
+	&= f(x_k) - t_k(1-\frac{\beta}{2}t_k)||\nabla f(x_k) ||^2_2 \\
+	&\leq f(x_k) - \frac{t_k}{2} ||\nabla f(x_k) ||^2_2 \quad \text{for sufficiently large k}
+\end{align*}
+\noindent
+From $\alpha$-s.c.: 
+\begin{align*}
+	f(x^*) &\geq f(x) + \nabla f^T(x) (x^* - x) + \frac{\alpha}{2} || x^* - x ||^2_2 \\
+	&\geq f(x) - || \nabla f(x)||_2||x^* - x||_2 + \frac{\alpha}{2} || x^2 - x ||^2_2 \quad \text{From Cauchy-Schwarz}
+\end{align*}
+Since $f(x) \geq f(x^*)$, $  - || \nabla f(x)||_2||x^* - x||_2 + \frac{\alpha}{2} || x^2 - x ||^2_2 \leq 0$. \newline
+And finally:
+\begin{equation*}
+	|| \nabla f(x) ||_2 \geq \frac{\alpha}{2} ||x^* - x||_2.
+\end{equation*}
+Using these two results:
+\begin{equation*}
+	f(x_k) - f(x_{k+1}) \geq \frac{\alpha}{4} || x_{k} - x^*||_2
+\end{equation*}
+We know that for some $k$ large enough:
+\begin{align*}
+	\sum{f(x_i) - f(x_{i+1})} &\geq \frac{\alpha}{4} \sum{t_i ||x_i - x^* ||_2}
+\end{align*}
+As the sum goes to infinity, $t_i$ will approach infinity and so $||x_i - x^* ||_2$ must reduce to zero faster, and if it were to be any other small value, it also would approach infinity. \newline
+Finally, to show that $||x_i - x^* ||_2$ gets smaller:
+\begin{align*}
+	|| x_k - x^* ||^2 - || x_{k+1} - x^* ||^2 &= || x_k - x^*||^2 - ||x_k - t_k \nabla f(x_k) - x^*||^2 \\
+	&= || x_k - x^*||^2 - ||( x_k - x^*) - t_k\nabla f(x_k)||^2 \\
+	&= || x_k - x^*||^2 - || x_k - x^*||^2 + 2t_k \nabla f^T(x_k)(x_k - x^*) - tk^2 || \nabla f(x_)||^2 \\
+	&\geq 2t_k( f(x_k) - f(x^*)) - t_k^2 \frac{2}{t_k}(f(x_k) - f(x_{k+1})) \\
+	&= 2t_k(f(x_{k+1})- f(x^*)) \\
+	&> 0
+\end{align*}
+Which shows that $||x_i - x^* ||_2$ decreases.
+\newpage
+\noindent 
+2. Convex Functions
+\newline
+\newline
+\noindent
+If $f_i$ are convex functions, then $\sup_i f_i(x)$ is also convex: \newline
+For $\theta \in [0, 1]$
+We know that for every $f_i$:
+\begin{equation*}
+	f_i(\theta x + (1-\theta)y) \leq \theta f_i(x) + (1-\theta)f_i(y)
+\end{equation*}
+So then:
+\begin{align*}
+	f_i(\theta x + (1-\theta)y) &\leq \theta f_i(x) + (1-\theta)f_i(y) \\
+	\sup_i{f_i(\theta x + (1-\theta)y)} &\leq \sup_i{\theta f_i(x) + (1-\theta)f_i(y)} \\
+	\sup_i{f_i(\theta x + (1-\theta)y)} &\leq \sup_i{\theta f_i(x)} + \sup_i{(1-\theta)f_i(y)} \\
+	f(\theta x + (1 - \theta)y) &\leq \theta f(x) + (1-\theta)f(y) \quad \qed
+\end{align*}
+Show that $\lambda_{\text{max}}(M)$ is a convex function of $M$. This can only be true if $M$ is a symmetric matrix. 
+Let $A, B \in \mathbb{S}^n$ and $\theta \in [0, 1]$. Additionally, $\lambda_{\text{max}}(M) = \max_{||v||^2=1} v^TMv$. 
+\begin{align*}
+	\lambda_{\text{max}}(\theta A + (1 - \theta) B) &= \max_{||v||^2 = 1} v^T(\theta A + (1 - \theta)B)v \\
+	&= \max_{||v||^2 = 1} {\theta v^TAv + (1-\theta)v^TBv} \\
+	&\leq \max_{||v||^2 = 1} {v^TAv} + \max_{||v||^2 = 1} {(1-\theta)v^TBv} \\
+	&= \theta\lambda_{\text{max}}(A) + (1-\theta)\lambda_{\text{max}}(B) \quad \qed
+\end{align*}
+Is the same true for the eigenvalue of the largest magnitude? \newline
+No. This is not true. Proof:
+Assume $A, B \in \mathbb{S}^n_{-}$. The magnitude of the largest eigenvalue is the minimum eigenvalue in this case. Therefore, in this specific case, $\lambda_{\text{max}}(|M|)$ can be rewritten as $\lambda_{\text{min}}(M) = \min_{||v||^2 = 1}{v^TMv}$. 
+\begin{align*}
+	\lambda_{\text{min}}(\theta A + (1 - \theta)B) &= \min_{||v||^2 = 1}v^T(\theta A + (1 - \theta)B)v \\
+	&= \min_{||v||^2 = 1}\theta v^TAv + (1 - \theta)v^TBv \\
+	&\geq \min_{||v||^2 = 1}\theta v^TAv  + \min_{||v||^2 = 1}(1 - \theta)v^TBv \\
+	&= \theta\lambda_{\text{min}}(A) + (1 - \theta)\lambda_{\text{min}}(B) \quad \qed
+\end{align*}
+Show that the weight of a path is a concave function of the weights:
+Let $p$ be a path with steps $p_1, ..., p_n$, where $p_1$ starts at node $a$ and $p_n$ terminates at $b$. Then
+\begin{equation*}
+	f(w) = \min_{p}\sum_{i=1}^{n}{w(p_i)}
+\end{equation*}
+Let $w_1, w_2$ be the weights of some path $p$. 
+\begin{align*}
+	f(\theta w_1 + (1-\theta)w_2) &=  \min_{p}\sum_{i=1}^{n}{\theta w_1(p_i) + (1 - \theta)w_2(p_i)} \\
+	&\geq \min_{p}\sum_{i=1}^{n}{\theta w_1(p_i)}  +  \min_{p}\sum_{i=1}^{n}{(1 - \theta)w_2(p_i)} \\
+	&= \theta f(w_1) + (1-\theta)f(w_2) \quad \qed
+\end{align*}
+\newpage
+\noindent
+3. Convex functions: Jensen's Inequality 
+\begin{equation*}
+	\text{epi}(f) = \{(x, y) \in \mathbb{R}^{n+1} \ : \ y \geq f(x)\}
+\end{equation*}
+Let $ (a, c), (b, d) \in \text{epi}(f)$ and $\theta = [0, 1]$. 
+Since $f$ is convex:
+\begin{align*}
+	f(\theta a + (1 - \theta)b) &\leq \theta f(a) + (1 - \theta) f(b)
+\end{align*}
+Since $ c \geq f(a)$ and $ d \geq f(b) $. 
+\begin{align*}
+	\theta f(a) + (1 - \theta) f(b) &\leq \theta c + (1 - \theta)d \\
+	f(\theta a + (1 - \theta)b) &\leq \theta c + (1 - \theta)d \quad \qed
+\end{align*}
+Show that for a random variable $X$ and an associated distribution $p$, and if $f$ is concave then:
+\begin{equation*}
+	\mathbb{E}[f(X)] \leq f(\mathbb{E}[X])
+\end{equation*}
+For a random vector with 2 elements, the answer is:
+\begin{align*}
+	\mathbb{E}[f(X)] &= p_1f(x_1) + p_2f(x_2) \quad \text{since} \sum_{i=1}^2{p_i}=1, p_2 = 1 - p_1\\
+	&= p_1f(x_1) + (1-p_1)f(x_2) \\
+	&\leq f(p_1x_1 + (1 - p_1)x_2) \\
+	&= f(\mathbb{E}[X])
+\end{align*}
+For any number of random variables: \newline
+Try to set it so it's similar to two elements. Let $p_m = 1 - \sum_{i=1}^{m-1}{p_i}$ where $p_m$ is the weight of the final element. 
+\begin{align*}
+	\mathbb{E}[f(X)] &= \sum_{i=1}^m{p_if(x_i)} \\
+	&= \sum_{i=1}^{m-1}{p_if(x_i)} + p_mf(x_m) \\
+	&=  \sum_{i=1}^{m-1}{p_i} \sum_{i=1}^{m-1}{\frac{p_i}{\sum_{i=1}^{m-1}{p_i}}f(x_i)} + \left(1 - \sum_{i=1}^{m-1}{p_i}\right)f(x_m)
+\end{align*}
+Which is in the same form as above. So:
+\begin{align*}
+	\mathbb{E}[f(X)] &=\sum_{i=1}^{m-1}{p_i} \sum_{i=1}^{m-1}{\frac{p_i}{\sum_{i=1}^{m-1}{p_i}}f(x_i)} + \left(1 - \sum_{i=1}^{m-1}{p_i}\right)f(x_m) \\
+	&\leq f\left(\sum_{i=1}^{m-1}{p_i} \sum_{i=1}^{m-1}{\frac{p_i}{\sum_{i=1}^{m-1}{p_i}}x_i} + \left(1 - \sum_{i=1}^{m-1}{p_i}\right)x_m \right) \\
+	&= f(\mathbb{E}[X]) \quad \qed
+\end{align*}
+
+\newpage
+\noindent
+4. Show that solution to a Euclidean projection onto a compact and convex set is unique. 
+\newline
+Proof by contradiction:
+Let $x_1, x_2$, where $x_1 \neq x_2$ but are both projections onto $X$ of $y$. We know that $|| y - x_1 || = || y - x_2 ||$.  
+\begin{align*}
+	\frac{1}{2}|| y - x_1 + y - x_2||^2_2 \leq \frac{1}{2}|| y - x_1 ||^2_2 + \frac{1}{2}|| y - x_2 ||^2_2 \\
+	|| y - \frac{x_1 + x_2}{2} ||_2^2 \leq || y - x_1 ||^2_2
+\end{align*}
+Which tells us that: $ \frac{x_1 + x_2}{2} \leq x_1 $. Since $x_1$ is already a minimum value, for this inequality to hold, $x_1 = x_2$. 
+\newline\newline
+Show that there is a hyperplane that separates the set X and the point y. There are a few proofs of this in Boyd and Vandenberghe. One of which utilizes the Lagrangian and duality in section 8.1.2 and another utilizes the fact that the distance between the $\Pi_X(y)$ and $y$ is minimized. \newline \newline
+Let the hyperplane be defined by $(\Pi_X(y) - y)^T(x - \frac{1}{2}(\Pi_X(y) + y)) = 0 $ We need to show that for any point $y \not\in X$ is positive for this hyperplane. Assume a point $u \not\in X$, but is in a convex ball around $y$ then:
+\begin{equation*}
+	f(u) = (\Pi_X(y) - y)^T(u-\Pi_X(y)) + \frac{1}{2}||\Pi_X(y) - y||^2_2
+\end{equation*} 
+Which implies that $(\Pi_X(y)-y)^T(u-\Pi_X(y)) < 0$. And then for some $ t \in (0, 1]$:
+\begin{equation*}
+	|| \Pi_X(y) + t(u-\Pi_X(y)) - y ||_2 < ||\Pi_X(y) - y||_2
+\end{equation*}
+Which implies that $u$ is a close point then $\Pi_X(y)$, which violates our assumptions. 
+\newline\newline
+Show that the projected subgradient descent update
+\begin{equation*}
+	x_{k+1} = \Pi_X(x_k - t_k\nabla f(x_k))
+\end{equation*}
+is equivalent to
+\begin{equation*}
+	x_{k+1}  = \text{arg}\min_{x\in X}\left\{x^T\nabla f(x_k) + \frac{1}{2t_k}||x - x_k||^2_2\right\}
+\end{equation*}
+Proof:
+\begin{align*}
+	x_{k+1} &= \Pi_X(x_k - t_k\nabla f(x_k)) \\
+	&= \text{arg}\min_{x\in X}{|| x_k - t_k\nabla f(x_k) - x ||^2_2} \\
+	&= \text{arg}\min_{x\in X}{|| (x_k - x) - t_k\nabla f(x_k)||^2_2} \\
+	&= \text{arg}\min_{x\in X}{|| x_k - x ||^2_2 - 2(x- x_k)^Tt_k\nabla f(x_k) + ||t_k\nabla f(x_k)||^2_2} \\
+	& \text{Since we are taking the min over x, we can remove the constant} \\
+	& \text{terms that do not depend on x} \\
+	&= \text{arg}\min_{x\in X}{||x - x_k||^2_2 + 2t_kx^T\nabla f(x_k)} \\
+	&= \text{arg}\min_{x\in X}{\frac{1}{2t_k}||x - x_k ||^2_2 + x^T\nabla f(x_k)} \quad \qed
+\end{align*}
+\newpage
+\noindent
+5. Computing Projections.
+\newline
+a) $\mathcal{X} = \mathbb{R}^n_+$
+\begin{equation*}
+	\Pi_X(z) = \begin{cases}
+		z & \text{if} \ z \geq 0 \\
+		0 & \text{if} \ z< 0
+	\end{cases}
+\end{equation*}
+b) $\{x \ : \ ||x||_2 \leq 1\}$
+\begin{equation*}
+	\Pi_X(z) = \begin{cases}
+		z & \text{if} \ ||z||_2 \leq 1\\
+		\frac{z}{||z||_2} & \text{otherwise}
+	\end{cases}
+\end{equation*}
+c) Positive Semidefinite Cone \newline
+Let $z = v^T\Lambda_zv$ and $ x = v^T\Lambda_xv$. 
+\begin{align*}
+	\Pi_X(z) &= \min_{x \in \mathbb{S}^n_+}|| x- z || \\
+	&= v^T \min_{x \in \mathbb{S}^n_+}{||\Lambda_x - \Lambda_z}||v \\
+	&= v^T\text{diag}(\max\{\lambda_i, 0\})v \quad \forall i
+\end{align*}
+d) $\mathcal{X}$ is a rectangle defined by vectors $L$ and $U$ that satisfy $U_i \geq L_i$. 
+\begin{equation*}
+	\Pi_X(z) = \begin{cases}
+		L_i & \text{if} \ z_i < L_i \\
+		z_i & \text{if} \ L_i \leq z_i \leq U_i \\
+		U_i & \text{if} \ z_i > U_i
+	\end{cases}
+\end{equation*}
+\noindent
+6. Computing More Projections. The proofs for these two were taken from \textit{Efficient Projects onto the $\ell_1$-Ball for Learning in High Dimensions} by Duchi, et. al.
+\newline
+a) 1-norm Ball
+\begin{align*}
+	&\min{||x - z||^2_2} \\
+	& \ \text{s.t.} \ ||x||_1 \leq 1
+\end{align*}
+Let $x^*$ be the optimal solution, then $\forall i, x^*_iz_i \geq 0$. Proof by contradiction:
+Let $\hat{x}$ be a vector such that for some $i$, $\hat{x}_i = 0$ and $\forall j \neq i, \hat{x}_j = x^*_j$. So then $||\hat{x}||_1 = ||x^*|| - |x^*_i| \leq z$ which allows for $\hat{x}$ to be feasible. So:
+\begin{align*}
+	||x^*- z||^2_2 - ||\hat{w} - v||^2_2 &= (x^*_i - v_i)^2 - (0 - v_i)^2 \\
+	&= (x^{*}_i)^{2} - 2x^*_iz_i \\
+	&\geq (x^{*}_i)^{2} \\
+	& \geq 0
+\end{align*}
+Which is a contradiction because it implies that $\hat{x}$ is the minimum solution, but we know that $x^*$ is. Via symmetry and the proof, we can reduce the problem to a probability simplex. The symmetry reduction requires $x^*_i = sign(z_i)\beta$, where $\beta$ is the solution the projection onto a probability simplex of $|z_i|$. The solution to a projection can be found below in the next section. Combining the two we get:
+\begin{equation*}
+	\Pi_X(z) = \max(0, \text{sign}(z_i)(|z_i| - \nu_i)) \ \forall i
+\end{equation*}
+b) Probability Simplex \newline
+\begin{align*}
+	&\frac{1}{2}\min{||x - z||^2_2} \\
+	& \ \text{s.t.} \ x \geq 0, \sum{x_i} = 1
+\end{align*}
+For $z \not\in \mathcal{X}$:
+\begin{equation*}
+	\mathcal{L}(x, \lambda, \nu) = \frac{1}{2}{||x - z||^2_2} + \sum_i{\lambda_i(-x_i)} + \nu(\sum_i{x_i} - 1)
+\end{equation*}
+When $\mathcal{L}$ points to the optimal solution $x^*$, the KKT conditions must be met. 
+\begin{align*}
+	\frac{\partial\mathcal{L}}{\partial x_i} &= x_i - z_i - \lambda_i + \nu_i = 0 \\
+	f_i(x^*) &\leq 0 \implies x^*_i \geq 0 \\
+	h_i(x^*) &= 0 \implies \sum_i{x^*_i} = 1 \\
+	\lambda_i &\geq 0 \\
+	\lambda(-x^*_i) &= 0  \implies \text{if}  \ x^*_i > 0, \text{then} \ \lambda_i = 0 \ \text{and vice versa}
+\end{align*}
+From this we get that $x^*_i = z_i - \nu_i$ or $x^* = 0$. 
+\newline
+Let $s, j$ be indices such that, if $z_s > z_j$, then if $ x^*_s = 0$, $ x^*_j = 0$.
+Proof by contradiction:
+Suppose $\exists z_s > z_j$ but $x^*_s = 0$ and $x^*_j \neq 0$. Let $\tilde{z}$ be the vector where the values at indices $s$ and $j$ are swapped. 
+\begin{align*}
+	||z - x^*||^2 - ||\tilde{z} - x^*||^2 &= z_s^2 + (z_j - x_j^*)^2 - (z_s - x^*_j)^2 - z_j^2 \\
+	&= 2x^*_j(z_s - z_j) \\
+	&> 0
+\end{align*}
+Which contradicts that $x^*$ is the optimal solution. 
+So the solution is:
+\begin{equation*}
+	\Pi_X(z) = \max(0, z_i - \nu_i) \ \forall i \ \text{assuming that} \sum_i{z_i - \nu_i} = 1
+\end{equation*}
+	
+% --- End Document
+\end{document}
