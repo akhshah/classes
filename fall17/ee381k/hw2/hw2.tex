@@ -1,0 +1,106 @@
+\documentclass{article}
+\usepackage{amsmath, amsthm, amssymb}
+\usepackage{cancel}
+
+% --- Begin Document
+\begin{document}
+
+% --- Title
+\begin{center}
+    {\huge EE381K: Assignment 2}
+\end{center}
+\begin{center}
+    Akhil Shah
+\end{center}
+\begin{center}
+    October 8th, 2017
+\end{center}
+
+\section{Written Problems}
+1. Show that subgradients have the following properties: \newline\newline
+a) $\partial(\alpha f(x)) = \alpha\partial f(x)$
+\begin{align*}
+	g &\in \alpha\partial f(x) \\
+	\frac{g}{\alpha} &\in \partial f(x) \\
+	f(x) - f(x_0) &\geq \frac{g^T}{\alpha}(x - x_0) \\
+	\alpha(f(x) - f(x_0)) &\geq g^T(x - x_0) \\
+	g &\in \partial \alpha f(x)
+\end{align*}
+b) $\partial(f_1 + f_2) = \partial f_1 + \partial f_2$ \newline\newline
+First, $\partial(f_1 + f_2) \supseteq \partial f_1 + \partial f_2$: \newline\newline
+Let $g_1 \in \partial f_1(x_0)$ and $g_2 \in \partial f_2(x_0)$.
+\begin{align*}
+	\partial f_1 \implies f_1(x) - f_1(x_0) &\geq g_1^T(x - x_0) \\
+	\partial f_2 \implies f_2(x) - f_2(x_0) &\geq g_2^T(x - x_0) \\
+\end{align*}
+And so:
+\begin{align*}
+	\partial f_1 + \partial f_2 \implies f_1(x) -f_1(x_0) &+ f_2(x) - f_2(x_0) \geq g_1^T(x- x_0) + g_2^T(x - x_0) \\
+	(f_1(x) + f_2(x)) &- (f_1(x_0) + f_2(x_0)) \geq (g_1 + g_2)^T(x - x_0) \\ 
+	\partial (f_2 + f_2) \quad \qed
+\end{align*}
+
+The reverse inclusion I was unable to solve. I found the proof in Rockafeller's book where he sets up a minimization problem but I am not sure, nor does he fully explain, how he set it up. Part b), c), d) all follow this.
+\newline\newline
+c) $\partial(f(Ax + b) = A^T\partial f(Ax + b)$
+Let $v \in \partial(f(Ax+b))$. 
+\begin{align*}
+	f(Ay+b) \geq f(Ax + b) + v^TA(y-x) \\
+	f(Ay + b) \geq f(Ax + b)  + (A^Tv)^T(y - x)
+\end{align*}
+d) $\partial f(x) = \text{conv} \cup_i \{\partial f_i(x), f_i(x)  = f(x)\}$. \newline
+Let $g = \sum{\lambda_ig_i}$ and let $g_i \in \partial f_i(x)$ where $\sum{\lambda_i} = 1$. 
+\begin{align*}
+	f(x) &= \sum{\lambda_if_i(x)} \geq \sum{\lambda_i(f_i(x_0) + g_i^T(x - x_0))} \\
+	&= \max_i f_i(x_0) + g^T(x - x_0)
+\end{align*}
+2. Compute the subgradient of the $||\cdot||_{2,1}$. \newline\newline
+The subdifferential of the Euclidean norm is:
+\begin{equation*}
+	\frac{d}{dx}(||x||_2) = \frac{x}{||x||}
+\end{equation*}
+\begin{equation*}
+	||M||_{2,1} = \sum_i{||M_i||_2} = ||M_1||_2 + ||M_2||_2 + ... + ||M_n||_2
+\end{equation*}
+And so from property 1b:
+\begin{equation*}
+	\partial ||M||_{2,1} = \partial [\sum_i{||M_i||_2} = \partial ||M_i||_2 + ... + \partial ||M_n||_2
+\end{equation*}
+And so:
+\begin{equation*}
+	\partial ||M||_{2,1} = \left\{x: x = \frac{M_i}{||M_i||_2}, \text{if } ||M_i||_2 \neq 0 | ||x|| \leq 1, \text{if } ||M_i|| = 0\right\}
+\end{equation*}
+3. Compute the subgradient of $f(x)$, where $f(x) = \lambda_{\text{max}}(A(x))$. \newline\newline
+For a fixed $y$, $f(x)$ is an affine function of $x$, i.e., $f_y(x) = y^TA(x)y$ and so $\nabla_x f_y(x) = (y^TA_1y, ..., y^TA_ny)$. And the maximum eigenvector is found by finding the $y$ that maximizes $f_y(x) = y^TA(X)y$, so we can use property 1d. The solution is then:
+\begin{equation*}
+	\partial f(x) = \text{conv}\left\{ (y^TA_1y, ..., y^TA_ny) | A(y)y = \lambda_{\text{max}}(A(x))y, ||y|| = 1\right\}
+\end{equation*}
+4. Show that the subdifferential of $I_{\mathcal{X}}$ is the normal cone. \newline\newline
+The subdifferential of the indicator function is any value between $[0, \infty)$ if it is in the set and $\emptyset$ if it is not. \newline
+The normal cone is defined as:
+\begin{equation*}
+	0 \geq g^T(y-x)
+\end{equation*}
+for any $g \in \partial f(x)$. Using the definition of the subdifferential for $y \in \mathcal{X}$:
+\begin{align*}
+	f(y) &\geq f(x) + g^T(y-x) \\
+	0 &\geq g^T(y-x)
+\end{align*}
+For $y \not\in \mathcal{X}$, the above does not hold and so the subdifferential of the indicator function is in the normal cone.  \newline\newline
+At what point is $x^*$ optimal. \newline\newline
+$x^*$ is optimal only if $0 \in \partial(f(x) + I_{\mathcal{X}})$ 
+\newline\newline
+5. Show that $\bar{x}$ is an optimum if and only if: \newline
+a) $-A^T(y- A\bar{x}) = \lambda z = 0$ \newline
+b) for every $i \in [n], z_i = \text{sign}(\bar{x}_i)$ if $\bar{x}_i \neq 0$, and $ |z_i| \leq 1$ if $\bar{x}_i = 0$.  \newline
+The subdifferential is the first part of the statement in a) where $z$ is the $\partial(\lambda||x||_1)$. For the $\bar{x}$ to be optimum, zero must be included in the set of subdifferentials. Additionally, b) is the definition of the subdifferential of the $\ell_1$ norm. \newline\newline
+6. $h_i = \frac{1}{\sqrt{i}}$ gives the desired decay rate bound. \newline
+Since, $\sum{h_i} = \infty$ and $h_i$ is monotonically decreasing and positive, we can bound the sum by above using the integral. Therefore: 
+\begin{equation*}
+	\sum{h_i} \leq \int{\frac{1}{\sqrt{x}}dx} = \mathcal{O}(\sqrt{x})
+\end{equation*}
+Additionally for  $\sum{h_i^2}$:
+\begin{equation*}
+	\sum{h_i^2} \leq \int{\frac{1}{x}dx} = \mathcal{O}(\log x)
+\end{equation*}
+\end{document}
