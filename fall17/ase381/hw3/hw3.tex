@@ -1,0 +1,91 @@
+\documentclass{article}
+\usepackage{amsmath, amsthm, amssymb}
+\usepackage{cancel}
+
+\usepackage[numbered, framed,autolinebreaks,useliterate]{mcode}
+\usepackage{float}
+\usepackage{graphicx}
+\usepackage{epstopdf}
+\usepackage{siunitx}
+\sisetup{output-exponent-marker=\ensuremath{\mathrm{e}}}
+
+% --- Begin Document
+\begin{document}
+
+% --- Title
+\begin{center}
+    {\huge ASE381P: Assignment 3}
+\end{center}
+\begin{center}
+    Akhil Shah
+\end{center}
+\begin{center}
+    October 25th, 2017
+\end{center}
+
+\noindent
+{\large Problem 1:}
+\begin{itemize}
+	\item What is the computed global minimizer?
+\end{itemize}
+\qquad \qquad The computer global minimizer is:
+\begin{equation*}
+	x = \begin{bmatrix} -0.2462 \\ -0.0691 \end{bmatrix}
+\end{equation*}
+\begin{itemize}
+	\item How many iterations were needed before successful termination?
+\end{itemize}
+\qquad \qquad 10 iterations were required. 
+\begin{itemize}
+	\item What is the value of $h(x_1^k, x_2^k)$ at the last step?
+\end{itemize}
+\qquad \qquad $h(x_1^k, x_2^k) = \num{3.0436e-05}$
+\begin{itemize}
+	\item Plot the sequence of points:
+\end{itemize}
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=0.75\textwidth]{prob1}
+	\caption{Plot of the points on the $x_1 - x_2$ plane visited by the algorithm by the first algorithm.}
+\end{figure}
+
+\newpage
+\noindent
+{\large Problem 2:}
+\begin{itemize}
+	\item What is the computed global minimizer?
+\end{itemize}
+\qquad \qquad The computer global minimizer is:
+\begin{equation*}
+	x = \begin{bmatrix} -0.2464 \\ -0.0691 \end{bmatrix}
+\end{equation*}
+\begin{itemize}
+	\item How many iterations were needed before successful termination?
+\end{itemize}
+\qquad \qquad 10 iterations were required. 
+\begin{itemize}
+	\item What is the value of $h(x_1^k, x_2^k)$ at the last step?
+\end{itemize}
+\qquad \qquad $h(x_1^k, x_2^k) = \num{1.9821e-05}$
+\begin{itemize}
+	\item Plot the sequence of points:
+\end{itemize}
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=0.75\textwidth]{prob2}
+	\caption{Plot of the points on the $x_1 - x_2$ plane visited by the algorithm by the second algorithm. The plot converges near the final result faster, but eventually takes the same number of iterations to reach the final answer.}
+\end{figure}
+
+\newpage
+\noindent
+{\huge Code:} \newline
+\texttt{prob1.m}
+\lstinputlisting{./prob1.m}
+\newpage
+\noindent
+\texttt{prob2.m}
+\lstinputlisting{./prob2.m}
+\end{document}
+
+
+\end{document}
