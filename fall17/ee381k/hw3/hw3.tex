@@ -1,0 +1,102 @@
+\documentclass{article}
+\usepackage{amsmath, amsthm, amssymb}
+
+% --- Begin Document
+\begin{document}
+
+% --- Title
+\begin{center}
+    {\huge EE381K: Assignment 3}
+\end{center}
+\begin{center}
+    Akhil Shah
+\end{center}
+\begin{center}
+    October 23th, 2017
+\end{center}
+
+\noindent
+{\large Problem 1:}
+\newline
+
+The definition of a subgradient is $f(y) \geq f(x) + g^T(Y-X)$. Additionally that $||Z||_2 = 1$, which is proved below:
+\begin{align*}
+	||Z||_2 &= ||UV^T + W|| \\
+	&=||UV^T + U_W \Sigma_W V_W^T || \\
+	&= ||[U \ U_W] \begin{bmatrix} \mathbb{I} & 0 \\ 0 & \Sigma_W \end{bmatrix} [V \ V_W]^T|| \\
+	&= 1
+\end{align*}
+Which means:
+\begin{align*}
+	||Y||_* &\geq Y^TZ  \\
+	&= X^TZ - X^TZ + Y^TZ \\
+	&= X^T(UV^T + W) + (Y-X)^T(UV^T + W) \\
+	&= ||X||_* + (Y - X)^TZ \quad \qed
+\end{align*}
+
+\noindent
+{\large Problem 3:}
+\newline
+Part a:
+\begin{equation*}
+	\mathcal{L}(z, u) = z^Tu + \sum_i {u \log u} + \lambda(1 - \sum_i u_i)
+\end{equation*}
+Using KKT:
+\begin{equation*}
+	z_i + 1 + \log u_i - \lambda = 0 \qquad
+	\sum_i u_i = 1
+\end{equation*}
+Solving for $u_i$
+\begin{align*}
+	z_i + 1 + \log u_i - \lambda &= 0 \\
+	u_i = \frac{e^{-z_i}}{e^{1-\lambda}}
+\end{align*}
+To ensure the second KKT condition:
+\begin{equation*}
+	u_i = \frac{e^{-z_i}}{\sum_j e^{-z_j}}
+\end{equation*}
+Let $ z = -\nabla \Phi(x) + \eta \nabla f(x) $, where $\nabla \Phi(x) = 1 + \log x$
+\begin{align*}
+	x_{t+1} &= \frac{e^{1 + \log x_i - \eta \nabla f(x_i)}}{\sum_j e^{1 + \log x_j - \eta\nabla f(x_j)}} \\
+	x_{t+1} &= \frac{x_i e^{-\eta\nabla f(x_i)}}{\sum_j x_j e^{-\eta \nabla f(x_j)}}
+\end{align*}
+\newpage
+\noindent
+{\large Problem 4:}
+\newline
+Let $f(x) = \frac{1}{2}x^TQx$ and $ Ay = x$. 
+The update for $x_{t+1}$ is:
+\begin{equation*}
+	x_{t+1} = x - \eta Qx_t
+\end{equation*}
+The update for $y_{t+1}$ is:
+\begin{equation*}
+	y_{t+1} = y_t - \eta A^TQAy_t
+\end{equation*}
+\begin{align*}
+	x_{t+1} = Ay_{t+1} &= A(y_t - \eta A^TQAy_t) \\
+	&= Ay_t - \eta AA^TQAy_t \\
+	x_{t+1} &= x_t - \eta AA^TQx \neq x - \eta Qx_t
+\end{align*}
+The only time where gradient descent is invariant to an affine transformation is when A is an orthogonal matrix. \newline
+The Newton's Method:
+\begin{align*}
+	x_{t+1} &= x_t - \eta Q^{-1}Qx_t \\
+	&= x_t - \eta x_t
+\end{align*}
+\begin{align*}
+	y_{t+1} &= y_t - \eta (A^TQA)^{-1}(A^TQA)y_t \\
+	&= y_t - \eta y_t
+\end{align*}
+Which is invariant to an affine transformation. 
+\noindent
+{\large Problem 5:}
+\newline
+Let $f(x) = x^T Q x$ where $Q = Q^T$. Which means $Q$ can be decomposed to $U\Lambda U^T$. 
+\begin{align*}
+	x_{t+1} &= x_t - \eta Q x_t = x_t = \eta U \Lambda U^T) x_t \\
+	U^T x_{t+1} &= (\mathbb{I} - \eta \Lambda)U^T x_t \\
+\end{align*}
+Which isolates the eigenvalues $\lambda_i$. The points that diverge are those that have eigenvalues less than 0, and the points that converge are those eigenvalues greater than 0. Eigenvalues equal to zero will converge, but not to 0. 
+
+\end{document}
