@@ -29,8 +29,12 @@ i = 1;
 while abs(h(x)) > tol
     x_plot(:,i) = x;
     
+    lamdak(i) = lambda;
+    alphak(i) = alpha;
+    hk(i) = abs(h(x));
+
     fun = @(x) phi(x,alpha, lambda);
-    lamda = lambda + alpha*h(x);
+    lambda = lambda + alpha*h(x);
     
     x = fminsearch(fun, x);
     i = i + 1;
