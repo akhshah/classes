@@ -1,0 +1,55 @@
+\documentclass{article}
+\usepackage{amsmath, amsthm, amssymb}
+
+% --- Begin Document
+\begin{document}
+
+% --- Title
+\begin{center}
+    {\huge EE381K: Assignment 4}
+\end{center}
+\begin{center}
+    Akhil Shah
+\end{center}
+\begin{center}
+    November 8th, 2017
+\end{center}
+
+{\large Problem 3:}
+\newline
+Let $f(x) = \frac{1}{2}x^TQx$ and $ Ay = x$. 
+The update for $x_{t+1}$ is:
+\begin{equation*}
+	x_{t+1} = x - \eta Qx_t
+\end{equation*}
+The update for $y_{t+1}$ is:
+\begin{equation*}
+	y_{t+1} = y_t - \eta A^TQAy_t
+\end{equation*}
+\begin{align*}
+	x_{t+1} = Ay_{t+1} &= A(y_t - \eta A^TQAy_t) \\
+	&= Ay_t - \eta AA^TQAy_t \\
+	x_{t+1} &= x_t - \eta AA^TQx \neq x - \eta Qx_t
+\end{align*}
+The only time where gradient descent is invariant to an affine transformation is when A is an orthogonal matrix. \newline
+The Newton's Method:
+\begin{align*}
+	x_{t+1} &= x_t - \eta Q^{-1}Qx_t \\
+	&= x_t - \eta x_t
+\end{align*}
+\begin{align*}
+	y_{t+1} &= y_t - \eta (A^TQA)^{-1}(A^TQA)y_t \\
+	&= y_t - \eta y_t
+\end{align*}
+Which is invariant to an affine transformation. 
+\noindent
+{\large Problem 5:}
+\newline
+Let $f(x) = x^T Q x$ where $Q = Q^T$. Which means $Q$ can be decomposed to $U\Lambda U^T$. 
+\begin{align*}
+	x_{t+1} &= x_t - \eta Q x_t = x_t = \eta U \Lambda U^T) x_t \\
+	U^T x_{t+1} &= (\mathbb{I} - \eta \Lambda)U^T x_t \\
+\end{align*}
+Which isolates the eigenvalues $\lambda_i$. The points that diverge are those that have eigenvalues less than 0, and the points that converge are those eigenvalues greater than 0. Eigenvalues equal to zero will converge, but not to 0. 
+
+\end{document}
