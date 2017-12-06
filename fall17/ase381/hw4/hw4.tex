@@ -1,0 +1,146 @@
+\documentclass{article}
+\usepackage[margin=1in]{geometry}
+\usepackage[numbered, framed,autolinebreaks,useliterate]{mcode}
+\usepackage{amsmath, amsthm}
+\usepackage{amssymb}
+\usepackage{graphicx}
+\usepackage{epstopdf}
+\usepackage{cancel}
+\usepackage{subcaption}
+\usepackage{mathtools}
+\usepackage{siunitx}
+\sisetup{output-exponent-marker=\ensuremath{\mathrm{e}}}
+\usepackage{float}
+
+
+% --- Begin Document
+\begin{document}
+
+% --- Title
+\begin{center}
+	{\huge ASE 381P-3: Assignment 4}
+\end{center}
+\begin{center}
+	Akhil Shah
+\end{center}
+\begin{center}
+	December 5th, 2017
+\end{center}
+
+\noindent
+{\large Problem 4}
+\newline
+\newline
+\noindent
+Intercept Solution:
+\newline
+The objective function is:
+\begin{equation*}
+	J(x, v, u) = \frac{1}{2}\sigma_x x^2(T) + \frac{1}{2}\sigma_v v^2(T) + \int_0^T{u(t)^2 dt}
+\end{equation*}
+and the goal is to intercept a position, i.e., reach the origin at time $T$, with any velocity.  \newline
+The dynamics is as follows:
+\begin{equation*}
+	\dot{x} = \begin{bmatrix} 0 & 1 \\ 0 & 0  \end{bmatrix} x + \begin{bmatrix} 0 \\ 1 \end{bmatrix}u 
+\end{equation*}
+where in the above equation is defined as $ x = \begin{bmatrix} x & v \end{bmatrix}^T $. \newline
+The Hamiltonian is :
+\begin{equation*}
+	\mathcal{H}(x, u, p) = p^T(Ax + Bu) - u^2
+\end{equation*}
+And the canonical equations are:
+\begin{align}
+	\dot{x}_* = \frac{\partial \mathcal{H}_*}{\partial p} &= Ax_* + Bu_* \label{eq:dyn1} \\ 
+	\dot{p}_* = -\left(\frac{\partial \mathcal{H}_*}{\partial x}\right)^T &= - A^Tp_* \label{eq:pd1} \\
+	0 = \frac{\partial \mathcal{H}_*}{\partial u} &= B^Tp_* - 2u_* \implies u_* = \frac{B^Tp_*}{2} \label{eq:u1}
+\end{align}
+We are able to solve (\ref{eq:pd1}) analytically and it gives us the following equations:
+\begin{equation}
+	p_* = \begin{bmatrix} c_1 \\ -c_1 t + c_2 \end{bmatrix} \label{eq:pa1}
+\end{equation}
+where $c_1$ and $c_2$ are constants of integration. It should be noted that there are no explicit boundary conditions on $p_*$, however, we can derive them from the terminal state conditions. From (\ref{eq:u1}) and (\ref{eq:dyn1}), we can solve the differential equation:
+\begin{align}
+	x(t) &= -\frac{c_1t^3}{12} + \frac{c_2t^2}{4} + c_3t + c_4 \label{eq:asol1} \\
+	v(t) &= -\frac{c_1^2}{4} + \frac{c_2t}{2} + c_3t \label{eq:asol2}
+\end{align}
+From the initial conditions $c_3 = v_0$ and $c_4 = x_0$. \newline
+The terminal conditions $x(T)$ and $v(T)$ and the terminal cost provide a means to solve for $c_1$ and $c_2$.
+\begin{equation*}
+	p_*(T) = -\frac{\partial K}{\partial x}(x(T)) = \begin{bmatrix} -\sigma_x x(T) \\ 0 \end{bmatrix}
+\end{equation*}
+Via algebraic manipulation of (\ref{eq:asol1}), (\ref{eq:asol2}), and the above equation, we find that:
+\begin{align*}
+	c_1 &= \frac{-(v_0T + x_0)6\sigma_x}{6 + T^3\sigma_x} \\
+	c_2 &= c_1T
+\end{align*}
+\newpage
+Intercept Results:
+\newline
+\begin{table}[H]
+	\centering
+	\caption{Control Effort for Various $\sigma_x$}
+	\begin{tabular}{c | c c c c c c}
+		$\sigma_x$ & $10^0$ & $10^1$ & $10^2$ & $10^3$ & $10^4$ & $10^5$ \\
+		\hline
+		$\int_0^T{u(t)^2 dt}$ & 1.8367 & 20.2402 & 34.3120 & 36.4823 & 36.7106 & 36.7336
+	\end{tabular}
+\end{table}
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=0.65\textwidth]{interx}
+	\caption{Intercept Case: Position reaches the prescribed terminal condition for any $\sigma_x$ greater than 100.}
+\end{figure}
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=0.65\textwidth]{interv}
+	\caption{Intercept Case: Velocity over time}
+\end{figure}
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=0.65\textwidth]{interu}
+	\caption{Intercept Case: Control over time}
+\end{figure}
+\newpage
+\noindent
+Rendezvous Solution:
+The procedure for the rendezvous solution is identical up to the boundary conditions. The boundary conditions for the co-state are:
+\begin{equation*}
+	p_*(T) = -\frac{\partial K}{\partial x}(x(T)) = \begin{bmatrix} -\sigma_x x(T) \\ -\sigma_v v(T) \end{bmatrix}
+\end{equation*}
+and after algebraic manipulation the constants are:
+\begin{align*}
+	&c_1\left(\frac{T}{\sigma_v} + \frac{4}{T^2\sigma_x\sigma_v} - \frac{T}{3\sigma_v} + \frac{T^2}{4} + \frac{2}{T\sigma_x} - \frac{T^2}{6}\right) = -v_0 - \frac{2x_0}{T} - \frac{4v_0}{T\sigma_v} - \frac{4x_0}{T^2\sigma_v}\\
+	&c_2 = -\frac{4}{T^2}\left(\frac{c_1}{\sigma_x} - \frac{c_1T^3}{12} + v_0T + x0\right)
+\end{align*}
+Rendezvous Results:
+\newline
+\begin{table}[H]
+	\centering
+	\caption{Control Effort for Various $\sigma_v$, when $\sigma_x = 10^3$}
+	\begin{tabular}{c | c c c c c c}
+		$\sigma_v$ & $10^0$ & $10^1$ & $10^2$ & $10^3$ & $10^4$ & $10^5$ \\
+		\hline
+		$\int_0^T{u(t)^2 dt}$ & 37.9394 & 68.4909 & 114.4446 & 123.9547 & 125.0000  & 125.1056
+	\end{tabular}
+\end{table}
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=0.65\textwidth]{rendezx}
+	\caption{Rendezvous Case: Position reaches the prescribed terminal condition for any $\sigma_v$. During testing, it was found that $\sigma_x$ had to be greater than 1000. }
+\end{figure}
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=0.65\textwidth]{rendezv}
+	\caption{Rendezvous Case: Velocity reaches the prescribed terminal condition when $\sigma_v \geq 10^3$}
+\end{figure}
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=0.65\textwidth]{rendezu}
+	\caption{Rendezvous Case: Control over time}
+\end{figure}
+
+\newpage
+\section{Appendix}
+\lstinputlisting{./p4.m} 
+
+\end{document}
