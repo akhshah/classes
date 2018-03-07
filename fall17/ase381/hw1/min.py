@@ -40,4 +40,3 @@ def main():
     #plots
     plt.clf()
     i_lin = np.linspace(0, i, num = i+1)
-    plt.plot(i_lin, 
