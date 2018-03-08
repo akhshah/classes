@@ -10,6 +10,7 @@
 *.synctex.gz
 *.fls
 *.fdb*
+*.pytxcode
 
 # Image Objects
 *.eps
