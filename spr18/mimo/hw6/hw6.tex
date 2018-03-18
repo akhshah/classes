@@ -1,0 +1,61 @@
+\documentclass{article}
+\usepackage[margin=1in]{geometry}
+%\usepackage[numbered, framed,autolinebreaks,useliterate]{mcode}
+\usepackage{amsmath, amsthm}
+\usepackage{amssymb}
+\usepackage{graphicx}
+\usepackage{epstopdf}
+\usepackage{cancel}
+\usepackage{subcaption}
+\usepackage{mathtools}
+\usepackage{siunitx}
+\sisetup{output-exponent-marker=\ensuremath{\mathrm{e}}}
+\usepackage{float}
+\usepackage[T1]{fontenc}
+\usepackage[numbered, framed]{matlab-prettifier}
+\usepackage{pythontex}
+
+\lstset{
+  style              = Matlab-editor,
+  basicstyle         = \mlttfamily,
+  escapechar         = ",
+  mlshowsectionrules = true,
+}
+
+\begin{document}
+\begin{center}
+	{\huge ASE 381P: Assignment 6}
+\end{center}
+\begin{center}
+	Akhil Shah
+\end{center}
+\begin{center}
+	March 20th, 2018
+\end{center}
+
+\noindent
+{\large Problem 1}
+\newline 
+In this problem, the largest decay rate is when $\alpha = 1$ which corresponds to the maximum negative eigenvalue of A. 
+\lstinputlisting{./prob1.m}
+
+\newpage
+\noindent
+{\large Problem 2}
+\newline
+
+A change of variables is required to allow for a $K$ to be found.
+$$ A_{cl}^TP + PA_{cl} + 2\alpha P < 0 $$
+$$ (A + BK)^TP + P(A + BK) + 2\alpha P < 0 $$
+$$ A^TP + K^TB^TP + PA + PBK + 2\alpha P < 0 $$
+
+However, it is impossible to find a K from the above equation and so pre- and post-multiply by $P^{-1}$. 
+$$ P^{-1}A^T + P^{-1}K^TB^T + AP^{-1} + BKP^{-1} + 2\alpha P^{-1} < 0 $$
+
+And set $Q = P^{-1}$ and $Z = KP^{-1}$. Which becomes:
+$$ QA^T + Z^TB^T + AQ + BZ + 2\alpha Q < 0 $$
+From the bisection method we get $\alpha = $ and $ K = \begin{bmatrix} 1 & 2 & 3 & 4 \end{bmatrix} $. 
+
+\lstinputlisting{./prob2.m}
+
+\end{document}
