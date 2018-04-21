@@ -1,0 +1,121 @@
+\documentclass{article}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath, amsthm}
+\usepackage{amssymb}
+\usepackage{graphicx}
+\usepackage{siunitx}
+
+% --- Begin Document
+\begin{document}
+
+% --- Title
+\begin{center}
+    {\huge Multivariate Control Systems - Homework 10}
+\end{center}
+\begin{center}
+    Akhil Shah
+\end{center}
+\begin{center}
+    April 20, 2018
+\end{center}
+
+\noindent
+{\large Problem 1}
+\newline
+\newline
+Show that 
+\begin{equation}
+    [I - G^{\sim}(s)G(s)] = \left[ \begin{array}{cc | c}
+                           A & BB^{*} & B \\
+                           -C^{*}C & -A^{*} & 0 \\
+                           \hline
+                           0 & B^{*} & I\\
+                           \end{array} \right]
+\end{equation}
+Using the multiplication rules found in Chapter 2:
+\begin{equation}
+    G^{\sim}(s)G(s) = \left[ \begin{array}{cc | c}
+                     -A^{*} & C^{*}C & 0 \\
+                     0 & A & B \\
+                     \hline
+                     B^{*} & 0  & 0\\
+                     \end{array} \right]
+\end{equation}
+And then the inversion rule:
+\begin{align}
+    A &= \begin{bmatrix} -A^{*} & C^{*}C \\
+                        0 & A \\
+        \end{bmatrix} - \begin{bmatrix} B \\ 0 \end{bmatrix} \begin{bmatrix} B^{*} & 0 \end{bmatrix} \\
+    BD^{-1} &= \begin{bmatrix} B \\ 0 \end{bmatrix} \\
+    -D^{-1}C &= \begin{bmatrix} B^* & 0 \end{bmatrix}
+\end{align}
+From this result and changing the order of the inputs we get:
+\begin{equation}
+    [I - G^{\sim}(s)G(s)] = \left[ \begin{array}{cc | c}
+                           A & BB^{*} & B \\
+                           -C^{*}C & -A^{*} & 0 \\
+                           \hline
+                           0 & B^{*} & I\\
+                           \end{array} \right]
+\end{equation}
+
+\noindent
+{\large Problem 2}
+\newline
+\newline
+i) In this case $\begin{bmatrix} C_2 D_{21} \end{bmatrix} = \begin{bmatrix} I & 0 \end{bmatrix}$. The kernel is then:
+\begin{equation} \begin{bmatrix} 0 \\ I \end{bmatrix} \end{equation}
+Then utilizing Theorem 7.10:
+\begin{equation}
+    N_c\begin{bmatrix} A^{*}X + XA & XB_1 & C_1^* \\
+                       B_1^*X & -I & D_{11}^* \\
+                       C_1 & D_{11} & -I
+       \end{bmatrix}N_c
+\end{equation}
+where $N_c$ is:
+\begin{equation}
+    N_c = \begin{bmatrix} 0 & 0 \\ I & 0 \\ 0 & I \end{bmatrix}
+\end{equation}
+And through judicious algebra we get the final result as:
+\begin{equation}
+    \begin{bmatrix} -I & D_{11}^* \\ D_{11} & -I \end{bmatrix} < 0
+\end{equation}
+ii) Using the elimination lemma, with $N_Q$ as:
+\begin{equation}
+    N_Q = \begin{bmatrix} 0 & 0 \\ I & 0 \\ 0 & I \end{bmatrix}
+\end{equation}
+and H as:
+\begin{equation}
+    H = \begin{bmatrix} AY + YA^* & YC_1^* & B_1 \\ C_1Y & -I & D_{11} \\ B_1^* & D_{11}^* & -I \end{bmatrix}
+\end{equation}
+which results in:
+\begin{equation}
+    \begin{bmatrix} -I & D_{11}^* \\ D_{11} & -I \end{bmatrix} < 0
+\end{equation}
+iii) With $u = Fx$
+\begin{align*}
+    \dot{x} &= (A + B_2F)x + B_1w \\
+    z &= (C_1 + D_{12}F)x + D_{11} \\
+    y &= x
+\end{align*}
+\begin{equation}
+    \begin{bmatrix} C^* \\ D^* \end{bmatrix}\begin{bmatrix} C & D \end{bmatrix} + \begin{bmatrix} A^*X + XA & XB \\ B^*X & -I \end{bmatrix} < 0
+\end{equation}
+And then using the Schur complemenet we get:
+\begin{equation}
+    \begin{bmatrix}
+        (A + B_2F)^*X + X(A + B_2F) & (C_1 + D_{12})^* & XB_1 \\
+        C_1 + D_{12} & -I & D_{11} \\
+        B_1^*X & D_{11}^* & -I
+    \end{bmatrix}
+\end{equation}
+With a transformation of:
+\begin{equation}
+    \begin{bmatrix}
+        X^{-1} & & \\
+        & I & \\
+        & & I
+    \end{bmatrix}
+\end{equation}
+Which gives the final result.
+\end{document}

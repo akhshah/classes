@@ -17,7 +17,7 @@ while((abs(alpha_up - alpha_lo) > tol) && i < 25)
     alpha = 0.5*(alpha_up + alpha_lo);
     F = [P > I, A'*P + P*A + 2*alpha*P < - I];
     test = optimize(F);
-    
+
     if test.problem == 1
         alpha_up = alpha;
     elseif test.problem == 0
@@ -26,4 +26,3 @@ while((abs(alpha_up - alpha_lo) > tol) && i < 25)
         disp('everything broke')
     end
 end
-        
