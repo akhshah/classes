@@ -1,0 +1,71 @@
+\documentclass{article}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath, amsthm}
+\usepackage{amssymb}
+\usepackage{graphicx}
+\usepackage{siunitx}
+\usepackage{graphicx}
+\usepackage{epstopdf}
+\usepackage{cancel}
+\usepackage{subcaption}
+\usepackage{mathtools}
+\usepackage{siunitx}
+\sisetup{output-exponent-marker=\ensuremath{\mathrm{e}}}
+\usepackage{float}
+
+% --- Title
+\title{ASE 381P-11 \- Non-Linear Dynamics \\ Final Project}
+\author{Akhil Shah}
+\date{May 3rd, 2018}
+
+% --- Begin Document
+\begin{document}
+
+\maketitle
+
+\section{Dynamical Equations}
+Letting $x_1, x_2, x_3$ equal $y, \dot{y}, i$, respectively, the dynamics are listed as follows:
+\begin{align}
+    \dot{x}_1 &= x_2 \\
+    \dot{x}_2 &= -\frac{k}{m}x_2 + g - \frac{L_0x_3^2}{2am(1+\frac{x_1}{a})} \\
+    \dot{x}_3 &= \frac{1}{L(x_1)}\left[ v - Rx_3 + \frac{L_0x_3x_2}{a(1+x_1/a)}\right] \label{dyn3}
+\end{align}
+The dynamics for state $x_3$, Eq.~\ref{dyn3}, is found via Kirchoff's voltage law as follows:
+\begin{align*}
+    v &= \frac{d}{dt}(L(x_1)x_3) + Rx_3 \\
+    &= L(x_1)\dot{x}_3 + \frac{d}{dt}\left(L_1 + \frac{L_0}{1 + x_1/a}\right)x_3 + Rx_3 \\
+    &= L(x_1)\dot{x}_3 - \frac{L_0x_3x_2}{a(1+x_1/a)} + Rx_3
+\end{align*}
+and then solve for $\dot{x}_3$.
+
+\section{Equilibrium Points and Steady-State Inputs}
+Beginning with the error dynamics:
+\begin{align}
+    e &= x_1 - r  = 0 \nonumber \\
+    \dot{e} &= x_2 - \cancelto{0}{\dot{r}} = 0 \nonumber \\
+    \ddot{e} &= g - \frac{L_0x_3^2}{2am(1 + x_1/a)^2} - \frac{k}{m}\cancelto{0}{x}_2 = 0 \label{eq:eddss} \\
+    \dot{x}_3 &= v - Rx_3 = 0 \label{eq:vss}
+\end{align}
+We can solve for the steady-state current, $i_{ss}$, from Eq.~\ref{eq:eddss}, which gives us:
+\begin{equation}
+    i_{ss} = \sqrt{\frac{2gam(1+x_1/a)}{L_0}}
+\end{equation}
+And then for the steady-state voltage, $v_{ss}$, from Eq.~\ref{eq:vss}, we get $v_{ss} = Ri_{ss}$.
+The equilibrium point when taking $v$ as $v_{ss}$ is:
+\begin{equation}
+    x_e = \begin{bmatrix} r \\ 0 \\ i_{ss} \end{bmatrix} \nonumber
+\end{equation}
+\par
+\noindent
+Instability of this equilibrium point can be determined via Lyapunov's Indirect Method.
+\begin{equation*}
+    \frac{\partial F}{\partial x}\Bigr|_{x = x_e} = \begin{bmatrix} 0 & 1 & 0 \\
+                                                                    \frac{2L_0}{r+a} & -\frac{k}{m} & -\frac{\sqrt{2ga}}{\sqrt{L_0m}(r+a)} \\
+                                                                    0 & \frac{L_0\sqrt{2gm}}{L(r)(a + r)} & -\frac{R}{L(r)}
+                                                                \end{bmatrix}
+\end{equation*}
+Which always gives a positive eigenvalue as long as $r > 0$, verified through MATLAB.
+
+\section{Feedback Linearization}
+
+\end{document}
