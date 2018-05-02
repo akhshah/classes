@@ -27,3 +27,6 @@
 # Compressed Files
 *.zip
 *.tar*
+
+# VIM objects
+*.un~
