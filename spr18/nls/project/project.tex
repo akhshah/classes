@@ -27,14 +27,14 @@
 Letting $x_1, x_2, x_3$ equal $y, \dot{y}, i$, respectively, the dynamics are listed as follows:
 \begin{align}
     \dot{x}_1 &= x_2 \\
-    \dot{x}_2 &= -\frac{k}{m}x_2 + g - \frac{L_0x_3^2}{2am(1+\frac{x_1}{a})} \\
-    \dot{x}_3 &= \frac{1}{L(x_1)}\left[ v - Rx_3 + \frac{L_0x_3x_2}{a(1+x_1/a)}\right] \label{dyn3}
+    \dot{x}_2 &= -\frac{k}{m}x_2 + g - \frac{L_0x_3^2}{2am(1+\frac{x_1}{a})^2} \\
+    \dot{x}_3 &= \frac{1}{L(x_1)}\left[ v - Rx_3 + \frac{L_0x_3x_2}{a(1+x_1/a)^2}\right] \label{dyn3}
 \end{align}
 The dynamics for state $x_3$, Eq.~\ref{dyn3}, is found via Kirchoff's voltage law as follows:
 \begin{align*}
     v &= \frac{d}{dt}(L(x_1)x_3) + Rx_3 \\
     &= L(x_1)\dot{x}_3 + \frac{d}{dt}\left(L_1 + \frac{L_0}{1 + x_1/a}\right)x_3 + Rx_3 \\
-    &= L(x_1)\dot{x}_3 - \frac{L_0x_3x_2}{a(1+x_1/a)} + Rx_3
+    &= L(x_1)\dot{x}_3 - \frac{L_0x_3x_2}{a(1+x_1/a)^2} + Rx_3
 \end{align*}
 and then solve for $\dot{x}_3$.
 
@@ -67,5 +67,149 @@ Instability of this equilibrium point can be determined via Lyapunov's Indirect 
 Which always gives a positive eigenvalue as long as $r > 0$, verified through MATLAB.
 
 \section{Feedback Linearization}
+If we let $y = x_1 - r$, then we can show that this system is feedback linearizable.
+\begin{align}
+    y &= x_1 - r = e \label{eq:y} \\
+    \dot{y} &= x_2 - \dot{r} = \dot{e} \label{eq:ydot} \\
+    \ddot{y} &= -\frac{k}{m}x_2 + g - \frac{L_0x_3^2}{2am(1 + x_1/a)^2} - \ddot{r} \label{eq:yddot} \\
+    \dddot{y} &= -\frac{k}{m}\dot{x}_2 - \left(\frac{L_0x_3\dot{x}_3}{am(1+x_1/a)^2} - \frac{L_0x_3^2}{a^2m(1+x_1/a)^2}\dot{x}_1\right) \label{eq:ydddot}
+\end{align}
+which we can use the above as the diffeomorphism with relative degree, $\rho$, 3 such that:
+\begin{equation}
+    \begin{bmatrix}
+        \xi_1 \\
+        \xi_2 \\
+        \xi_3
+    \end{bmatrix} =
+    \begin{bmatrix}
+        x_1 - r \\
+        x_2 - \dot{r} \\
+        -\frac{k}{m} + g - \frac{L_0x_3^2}{2am(1 + x_1/a)^2} -\ddot{r}
+    \end{bmatrix}
+\end{equation}
+The dynamics of $\dot{\xi}$ is then:
+\begin{equation}
+    \begin{bmatrix}
+        \dot{\xi_1} \\
+        \dot{\xi_2} \\
+        \dot{\xi_3}
+    \end{bmatrix} =
+    \begin{bmatrix}
+        \xi_2 \\
+        -\frac{k}{m}x_2 + g -\frac{L_0x_3^2}{2am(1 + x_1/a)^2} -\ddot{r} \\
+        -\frac{k}{m}\dot{x}_2 - \left[\frac{L_0x_3}{am(1 + x_1/a)^2}\left(v - Rx_3 + \frac{L_0x_3x_2}{a(1 + x_1/a)^2}\right)\frac{1}{L(x_1)} - \frac{L_0x_3^2}{a^2m(1 + x_1/a)^3}x_2\right] - \dddot{r}
+    \end{bmatrix}
+\end{equation}
+The controller to linearize is then:
+\begin{equation}
+    v = Rx_3 + \frac{L_0x_3x_2}{a(1 + x_1/a)^2} + \frac{L(x_1)x_3x_2}{a(1 + x_1/a)} - \frac{L(x_1)am(1 + x_1/a)^2}{L_0x_3}u + \frac{am(1 + x_1/a)^2}{L_0x_3}\dddot{r}
+\end{equation}
+where u is set as:
+\begin{equation}
+    u = -k_1(x_1 - r) - k_2(x_2 - \dot{r}) - k_3(\dot{x}_2 - \ddot{r})
+\end{equation}
+\newpage
+\subsection{Stability}
+In this case the higher derivatives the reference trajectory, $r$, is set to 0.
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.65\textwidth]{fbstable}
+    \caption{Position over time stabilized at r = 0.05 m.}
+\end{figure}
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.65\textwidth]{fbstableerror}
+    \caption{Error between reference position and actual position.}
+\end{figure}
 
+\subsection{Tracking}
+The same controller for stabilization can be used for tracking a trajectory. The prescribed trajectory for this problem is $0.05 + 0.01\sin(t)$.
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.65\textwidth]{fbtrack}
+    \caption{Position tracking for the prescribed trajectory.}
+\end{figure}
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.65\textwidth]{fbtrackerror}
+    \caption{Error between reference trajectory and actual position.}
+\end{figure}
+
+\section{Backstepping}
+Starting with error dynamics:
+\begin{align}
+    \dot{e} = x_2 - \dot{r} \\
+\end{align}
+The goal then is to drive the error to 0, by driving $\dot{e}$ to zero exponentially. By choosing $x_2 = -(x_1 - r) + \dot{r}$, the error dynamics become:
+\begin{equation}
+    \dot{e} = -e + (x_2 + e - \dot{r}) = -e + w
+\end{equation}
+The dynamics of this error, $w$, is then:
+\begin{align}
+    \dot{w} &= \dot{x}_2 + \dot{e} - \ddot{r} \\
+    &= -\frac{k}{m}x_2 + g - \ddot{r} - \frac{L_0q}{(1 + x_1/a)^2} + \dot{e} = u \label{eq:first}
+\end{align}
+where $q = \frac{1}{2}x_3^2$ and $\dot{q} = \dot{x}_3x_3$. The storage function then to stabilize can be defined as:
+\begin{align}
+    V = \frac{1}{2}e^2 + \frac{1}{2}w^2
+\end{align}
+and taking the time derivative:
+\begin{align}
+    \dot{V} = -e^2 + w(e + u). \label{eq:vdot}
+\end{align}
+For this system to be stabilized Eq~\ref{eq:vdot} must be, at minimum, negative semi-definite, which occurs when $u = -e + k_1w$, where $k_1 > 0$. Then solving for $q$ in Eq~\ref{eq:first}, with $u = -e + k_1w$, we get:
+\begin{equation}
+    q = \frac{am(1 + x_1/a)^2}{L_0}\left(-\frac{k}{m}x_2 + g - \ddot{r} + \dot{e} + e + k_1w\right) \label{eq:q}
+\end{equation}
+Now using the $q$ from Eq.~\ref{eq:q} and the error dynamics through the second derivative.
+\begin{align*}
+    \ddot{e} = -\frac{k}{m}x_2 + g &- \ddot{r} - \frac{L_0}{am(1 + x_1/a)^2}\left[q - \frac{am(1 + x_1/a)^2}{L_0}\left(-\frac{k}{m}x_2 + g - \ddot{r} + (1 + k_1)(\dot{e} + e)\right)\right] \\
+    &- \left(-\frac{k}{m}x_2 + g - \ddot{r} + (1 + k_1)(\dot{e} + e)\right)
+\end{align*}
+where $z = \left[q - \frac{am(1 + x_1/a)^2}{L_0}\left(-\frac{k}{m}x_2 + g - \ddot{r} + (1 + k_1)(\dot{e} + e)\right)\right] $. Then continuing the backstepping process by finding $\dot{z}$:
+\begin{equation}
+    \dot{z} = \dot{q} + \frac{2mx_2(1 + x_1/a)}{L_0}\left(\frac{k}{m}x_2 - g + \ddot{r} - (1 + k_1)(\dot{e} + e)\right) + \frac{am(1 + x_1/a)^2}{L_0}\left(\frac{k}{m}\dot{x}_2 + \dddot{r} - (1 + k_1)(\ddot{e} + \dot(e))\right) = c
+\end{equation}
+The storage function for this then is:
+\begin{equation}
+    V_{c} = V + \frac{1}{2}z^2
+\end{equation}
+which gives us $\dot{V}_c$ as:
+\begin{equation}
+    \dot{V}_c = -e^2 - k_1w^2 + zc
+\end{equation}
+and so $c$ has to be $-k_2z$ to stabilize the system. From this, we can conclude that the control input $v$ of the total system is:
+\begin{align*}
+    v &= Rx_3 - \frac{L_0x_2x_3}{a(1 + x_1/a)^2} + \\
+     &\frac{L(x_1)}{x_3}\left[-k_2z - \frac{2mx_2(1 + x_1/a)}{L_0}\left(\frac{k}{m}x_2 - g + \ddot{r} - (1 + k_1)(\dot{e} + e)\right) + \frac{am(1 + x_1/a)^2}{L_0}\left(\frac{k}{m}\dot{x}_2 + \dddot{r} - (1 + k_1)(\ddot{e} + \dot(e))\right)\right]
+\end{align*}
+\newpage
+\subsection{Stabilization}
+In this case the higher derivatives the reference trajectory, $r$, is set to 0.
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.65\textwidth]{bsstable}
+    \caption{Position over time stabilized at r = 0.05 m.}
+\end{figure}
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.65\textwidth]{bsstableerror}
+    \caption{Error between reference position and actual position.}
+\end{figure}
+
+\subsection{Tracking}
+The same controller for stabilization can be used for tracking a trajectory. The prescribed trajectory for this problem is $0.05 + 0.01\sin(t)$.
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.65\textwidth]{bstrack}
+    \caption{Position tracking for the prescribed trajectory.}
+\end{figure}
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.65\textwidth]{bstrackerror}
+    \caption{Error between reference trajectory and actual position.}
+\end{figure}
+The backstepping controller outperforms the feedback linearized controller in terms of the gains required to achieve good performance and in the tracking position is able to bring the position error to a level without large steady state error. The feedback linearized controller could reduce the steady-state error with the introduction of an integration portion.
+\section{Disturbance}
+Utilizing the same controller defined in the Backstepping section, an additional two terms of the disturbance are added and scaled in $\dot{V}$. This term can be dominated by the gains and as such can drive the error down to some arbitrary small radius $\mu$, but causes the adverse affect of inducing high actuation in the actuators. The actuators may not be able to provide such actuation however.
 \end{document}
