@@ -1,4 +1,4 @@
-%% 
+%%
 close all
 clear all
 clc
@@ -81,7 +81,7 @@ ylabel('Error [m]', 'interpreter', 'latex', 'FontSize', 15)
 print('bsstableerror', '-depsc')
 
 %% Propagate state (f-d)
-[t, x] = ode45(@(t,x)dyn(t, x, bscont3(t, x, constants), constants), tspan, x0);
+[t, x] = ode45(@(t,x)dyn(t, x, bscont2(t, x, constants), constants), tspan, x0);
 x_bst = x;
 
 figure

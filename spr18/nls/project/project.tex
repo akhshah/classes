@@ -12,6 +12,8 @@
 \usepackage{siunitx}
 \sisetup{output-exponent-marker=\ensuremath{\mathrm{e}}}
 \usepackage{float}
+\usepackage[T1]{fontenc}
+\usepackage[numbered, framed]{matlab-prettifier}
 
 % --- Title
 \title{ASE 381P-11 \- Non-Linear Dynamics \\ Final Project}
@@ -212,4 +214,19 @@ The same controller for stabilization can be used for tracking a trajectory. The
 The backstepping controller outperforms the feedback linearized controller in terms of the gains required to achieve good performance and in the tracking position is able to bring the position error to a level without large steady state error. The feedback linearized controller could reduce the steady-state error with the introduction of an integration portion.
 \section{Disturbance}
 Utilizing the same controller defined in the Backstepping section, an additional two terms of the disturbance are added and scaled in $\dot{V}$. This term can be dominated by the gains and as such can drive the error down to some arbitrary small radius $\mu$, but causes the adverse affect of inducing high actuation in the actuators. The actuators may not be able to provide such actuation however.
+
+\newpage
+\section{main.m}
+\lstinputlisting{./main.m}
+\section{dyn.m}
+\lstinputlisting{./dyn.m}
+\section{flcont.m}
+\lstinputlisting{./flcont.m}
+\section{flcont2.m}
+\lstinputlisting{./flcont2.m}
+\section{bscont.m}
+\lstinputlisting{./bscont.m}
+\section{bscont2.m}
+\lstinputlisting{./bscont2.m}
+
 \end{document}
